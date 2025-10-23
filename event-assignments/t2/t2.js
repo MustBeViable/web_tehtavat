@@ -771,6 +771,7 @@ const restaurants = [
 ];
 
 const table = document.querySelector('table');
+const dialog = document.querySelector('dialog')
 
 function sortList(array) {
   return [...array].sort((a, b) =>
@@ -781,9 +782,64 @@ function sortList(array) {
 function clearClasses() {
   try {
   const nodeList = document.querySelector('tr[class="highlight"]');
-  console.log(nodeList);
   nodeList.className = ""
 } catch (e) {}
+}
+
+function findRestaurant(id) {
+  for (let i = 0; i<restaurants.length; i++) {
+    if (restaurants[i]._id===id) {
+      return restaurants[i];
+    }
+  }
+}
+
+function modifyModal(restaurant) {
+  dialog.innerHTML = `
+  <table>
+
+  <tr>
+  <th>Restaurant name:</th>
+  <th>${restaurant.name}</th>
+  </tr>
+
+  <tr>
+  <th>Address:</th>
+  <th>${restaurant.address}</th>
+  </tr>
+
+  <tr>
+  <th>Postal code:</th>
+  <th>${restaurant.postalCode}</th>
+  </tr>
+
+  <tr>
+  <th>City:</th>
+  <th>${restaurant.city}</th>
+  </tr>
+
+  <tr>
+  <th>Phone number:</th>
+  <th>${restaurant.phone}</th>
+  </tr>
+
+  <tr>
+  <th>Company:</th>
+  <th>${restaurant.company}</th>
+  </tr>
+
+  </table>
+
+  <button id="close-modal">X</button>
+  `
+  dialog.showModal();
+  const button = document.getElementById('close-modal');
+  button.addEventListener('click', (e) => {
+    e.preventDefault()
+    dialog.innerHTML= "";
+    dialog.close();
+  })
+
 }
 
 function addElements(array) {
@@ -798,6 +854,7 @@ function addElements(array) {
     tr.addEventListener('click', () => {
       clearClasses();
       tr.className = "highlight";
+      modifyModal(findRestaurant(element._id));
     })
   });
 }
