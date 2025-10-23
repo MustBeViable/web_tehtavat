@@ -1,3 +1,9 @@
+// Open t4 folder in your IDE/editor. In the t4.js file, you will find an array containing restaurant data, including their respective locations. `
+// The objective of the application is to determine your current location. Then, the application should sort the array of restaurants based on the distance
+// from the nearest to the farthest. Finally, the application should display a list of restaurants in order, starting with the nearest and ending with the farthest.
+// This list should include the names and addresses of the restaurants.
+// You can use the formula for Euclidean distance from JS recap 1.2. It’s not 100% accurate, since earth is not actually flat, but for now it’s close enough.
+
 const restaurants = [
   {
     location: {type: 'Point', coordinates: [25.018456, 60.228982]},
@@ -770,4 +776,61 @@ const restaurants = [
   },
 ];
 
-// your code here
+function userLocator() {
+  return new Promise((resolve, reject) =>{
+        if (!("geolocation" in navigator)) {
+      reject(new Error("Geolocation ei tuettu"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+    pos => {resolve({
+      long: pos.coords.longitude,
+      lat: pos.coords.latitude})
+    },
+    err => {console.log("ei toimi tää", err.message)},
+        {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    }
+  )});
+}
+
+async function sortListByNearest(restaurantList) {
+  try {
+  const userLoc = await userLocator();
+  const sortedRestaurantList = restaurantList.slice().sort( (a, b) =>{
+    const resLongA = a.location.coordinates[0];
+    const resLatA = a.location.coordinates[1];
+    const resLongB = b.location.coordinates[0];
+    const resLatB = b.location.coordinates[1];
+    return findDistances(userLoc.long, userLoc.lat, resLongA, resLatA) - findDistances(userLoc.long, userLoc.lat, resLongB, resLatB)
+  });
+  return sortedRestaurantList}
+  catch (error) {
+    console.error(error.message);
+  }
+}
+
+function findDistances(userLong, userLat, resLong, resLat) {
+  const dLat = Math.abs(userLat - resLat);
+  const dLong = Math.abs(userLong - resLong);
+  return (Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLong, 2)))
+}
+
+async function addRestaurantList() {
+  try {
+  const table = document.querySelector("table");
+  const sortedList = await sortListByNearest(restaurants);
+  for (let i = 0; i < restaurants.length; i++) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+    <td>${sortedList[i].name}</td>
+    <td>${sortedList[i].address}</td>
+    `;
+    table.appendChild(tr);
+  }}
+  catch (error) { console.log(error.message)}
+}
+
+addRestaurantList()
