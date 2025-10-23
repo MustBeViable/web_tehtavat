@@ -782,17 +782,10 @@ function sortList(array) {
 function clearClasses() {
   try {
   const nodeList = document.querySelector('tr[class="highlight"]');
-  nodeList.className = ""
+  nodeList.classList.remove('highlight');
 } catch (e) {}
 }
 
-function findRestaurant(id) {
-  for (let i = 0; i<restaurants.length; i++) {
-    if (restaurants[i]._id===id) {
-      return restaurants[i];
-    }
-  }
-}
 
 function modifyModal(restaurant) {
   dialog.innerHTML = `
@@ -853,8 +846,8 @@ function addElements(array) {
     table.appendChild(tr);
     tr.addEventListener('click', () => {
       clearClasses();
-      tr.className = "highlight";
-      modifyModal(findRestaurant(element._id));
+      tr.classList.add('highlight');
+      modifyModal(element);
     })
   });
 }
