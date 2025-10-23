@@ -770,4 +770,56 @@ const restaurants = [
   },
 ];
 
-// your code here
+let map = L.map('map');
+const body =  document.querySelector('body');
+function userLocator() {
+  return new Promise((resolve, reject) =>{
+        if (!("geolocation" in navigator)) {
+      reject(new Error("Geolocation ei tuettu"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+    pos => {resolve({
+      long: pos.coords.longitude,
+      lat: pos.coords.latitude})
+    },
+    err => {console.log("ei toimi tää", err.message)},
+        {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    }
+  )});
+}
+async function getUserLocation() {
+  try {
+  const userCoords = await userLocator();
+  map.setView([userCoords.lat, userCoords.long], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);}
+catch (e) {
+  console.log(e.message);
+}
+}
+
+function setMarkers(list) {
+  const div = document.createElement('div');
+  body.appendChild(div);
+  for (let i = 0; i<list.length; i++) {
+    const long = list[i].location.coordinates[0];
+    const lat = list[i].location.coordinates[1];
+    const marker = L.marker([lat, long]).addTo(map);
+    marker.on('click', () => {
+      div.innerHTML = `
+      <h3>${list[i].name}</h3>
+      <p>${list[i].address}</p>
+      `
+      map.setView([lat, long], 15);
+    })
+  }
+}
+
+getUserLocation();
+setMarkers(restaurants);
