@@ -770,4 +770,36 @@ const restaurants = [
   },
 ];
 
-// your code here
+const table = document.querySelector('table');
+
+function sortList(array) {
+  return [...array].sort((a, b) =>
+    a.name.localeCompare(b.name, 'fi', { sensitivity: 'base' })
+    );
+}
+
+function clearClasses() {
+  try {
+  const nodeList = document.querySelector('tr[class="highlight"]');
+  console.log(nodeList);
+  nodeList.className = ""
+} catch (e) {}
+}
+
+function addElements(array) {
+  array.forEach(element => {
+    const tr = document.createElement('tr');
+    tr.id = element._id;
+    tr.innerHTML = `
+    <td>${element.name}</td>
+    <td>${element.address}</td>
+    `
+    table.appendChild(tr);
+    tr.addEventListener('click', () => {
+      clearClasses();
+      tr.className = "highlight";
+    })
+  });
+}
+
+addElements(sortList(restaurants));
