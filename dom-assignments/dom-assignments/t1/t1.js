@@ -29,16 +29,26 @@ const todoList = [
 
 function addElements(list) {
   const ul = document.querySelector("ul");
-  for (let i=0; i<list.length; i++) {
+  for (let i=0; i<list.length; i++) {    if (list[i].completed){
     ul.insertAdjacentHTML(
       "beforeend",
       `
       <li>
-        <input type="checkbox" id="todo-${list[i].id}" ${list[i].completed ? "checked" : ""}>
+        <input type="checkbox" id="todo-${list[i].id}" checked>
         <label for="todo-${list[i].id}">${list[i].task}</label>
       </li>
       `
-    );
+    )}
+    else {
+      ul.insertAdjacentHTML(
+      "beforeend",
+      `
+      <li>
+        <input type="checkbox" id="todo-${list[i].id}">
+        <label for="todo-${list[i].id}">${list[i].task}</label>
+      </li>
+      `
+    )};
   }
 }
 
