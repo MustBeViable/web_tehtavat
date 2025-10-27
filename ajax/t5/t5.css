@@ -29,3 +29,23 @@ td {
   background-color: aqua;
   font-weight: bolder;
 }
+
+.menu_class table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.menu_class td {
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+
+.menu_class td {
+  border-bottom: 1px solid hsl(0, 93%, 22%);
+  padding: 0.5em 1em;
+}
