@@ -26,9 +26,9 @@ td {
   padding: 0.5em 1em;
 }
 
-td:hover {
+.restaurant_list tr:hover {
   font-weight: bold;
-  background-color: #b51010;
+  background-color: aqua;
 }
 
 .menu_table {

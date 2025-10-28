@@ -1,13 +1,7 @@
 import { restaurantRow, restaurantModal } from "./components/components.js";
 import { restaurantListUrl, restaurantMenuUrl, table, dialog } from "./variables.js";
-import { fetchData, sortList } from './utils.js';
+import { fetchData, sortList, clearClasses } from './utils.js';
 
-const clearClasses = () => {
-  try {
-    const nodeList = document.querySelector('tr[class="highlight"]');
-    nodeList.classList.remove("highlight");
-  } catch (e) {}
-};
 
 const failedToLoad = (place) => {
   const div = document.createElement('div');

@@ -16,5 +16,11 @@ const sortList = (array) => {
   );
 };
 
+const clearClasses = () => {
+  try {
+    const nodeList = document.querySelector('tr[class="highlight"]');
+    nodeList.classList.remove("highlight");
+  } catch (e) {}
+};
 
-export { fetchData, sortList };
+export { fetchData, sortList, clearClasses };
