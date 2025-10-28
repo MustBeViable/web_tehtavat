@@ -23,4 +23,8 @@ const clearClasses = () => {
   } catch (e) {}
 };
 
-export { fetchData, sortList, clearClasses };
+const clearRestaurantList = (element) => {
+  element.innerHTML = '';
+}
+
+export { fetchData, sortList, clearClasses, clearRestaurantList };

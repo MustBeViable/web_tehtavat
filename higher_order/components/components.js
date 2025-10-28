@@ -69,4 +69,5 @@ const restaurantModal = (restaurant, menu) => {
   return restaurantHTML + menuHTML;
 };
 
+
 export { restaurantRow, restaurantModal };
