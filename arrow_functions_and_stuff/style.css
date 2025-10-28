@@ -15,7 +15,8 @@ table {
 th {
   background-color: #f0f0f0;
   border-bottom: 1px solid #ccc;
-  font-weight: normal;
+  font-weight: bold;
+  font-size: large;
   padding: 0.5em 1em;
   text-align: left;
 }
@@ -23,6 +24,11 @@ th {
 td {
   border-bottom: 1px solid #ccc;
   padding: 0.5em 1em;
+}
+
+td:hover {
+  font-weight: bold;
+  background-color: #b51010;
 }
 
 .menu_table {

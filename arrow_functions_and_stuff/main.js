@@ -1,13 +1,6 @@
 import { restaurantRow, restaurantModal } from "./components/components.js";
-
-const table = document.querySelector("table");
-const dialog = document.querySelector("dialog");
-
-const sortList = (array) => {
-  return [...array].sort((a, b) =>
-    a.name.localeCompare(b.name, "fi", { sensitivity: "base" })
-  );
-};
+import { restaurantListUrl, restaurantMenuUrl, table, dialog } from "./variables.js";
+import { fetchData, sortList } from './utils.js';
 
 const clearClasses = () => {
   try {
@@ -41,9 +34,8 @@ const addElements = (array) => {
       tr.addEventListener("click", async () => {
         clearClasses();
         tr.classList.add("highlight");
-        const menu = await fetchData(
-          `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${restaurant._id}/fi`
-        );
+        let url = restaurantMenuUrl + restaurant._id + '/fi';
+        const menu = await fetchData(url);
         if (menu?.courses?.length) {
           dialog.innerHTML = restaurantModal(restaurant, menu);
           dialog.showModal();
@@ -58,23 +50,9 @@ const addElements = (array) => {
   }
 };
 
-const fetchData = async (url) => {
-  try {
-    const response = await fetch(url);
-    if (response.ok) {
-      return response.json();
-    }
-  } catch (e) {
-    console.log(e);
-    failedToLoad("anything");
-  }
-};
-
 const run = async () => {
   try {
-    const data = await fetchData(
-      "https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants"
-    );
+    const data = await fetchData(restaurantListUrl);
     const list = Array.isArray(data) ? data : [];
     addElements(sortList(list));
   } catch (err) {
