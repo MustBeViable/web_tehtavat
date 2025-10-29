@@ -28,7 +28,12 @@ const clearClasses = () => {
 };
 
 const clearRestaurantList = (element) => {
-  element.innerHTML = "";
+  element.innerHTML = `
+  <table class="restaurant_list">
+    <tr>
+      <th>Name</th>
+      <th>Company name</th>
+    </tr>`;
 };
 
 function debounce(fn, delay = 300) {
@@ -46,12 +51,12 @@ const failedToLoad = (element, message, buttonText ) => {
   div.setAttribute("aria-live", "polite")
   div.innerHTML += `
     <h1>${message}</h1>
-    <button id="close_me">${buttonText}</button>
     `;
   errorElement.appendChild(div);
   document.querySelector("body").appendChild(errorElement);
   switch (element) {
     case "dialog": {
+      div.innerHTML += `<button id="close_me">${buttonText}</button>`;
       document.getElementById("close_me")?.addEventListener("click", (e) => {
         e.preventDefault();
         errorElement.close();
@@ -61,6 +66,7 @@ const failedToLoad = (element, message, buttonText ) => {
       break;
     }
     case "div": {
+      div.innerHTML += `<button id="close_me">${buttonText}</button>`;
       document.getElementById("close_me")?.addEventListener("click", (e) => {
         errorElement.innerHTML = "";
         location.reload();
