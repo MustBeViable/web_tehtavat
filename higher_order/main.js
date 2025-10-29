@@ -16,16 +16,13 @@ import {
   failedToLoad
 } from "./utils.js";
 
+//caches restauranlist to only one API call per reload.
+let restaurantsCache = [];
 
 const addElements = (array) => {
   if (array?.length >= 1) {
     array.forEach((restaurant) => {
       const tr = restaurantRow(restaurant);
-      document
-        .getElementById("close-modal")
-        ?.addEventListener("click", () =>
-          document.querySelector("dialog").close()
-        );
       table.appendChild(tr);
       tr.addEventListener("click", async () => {
         clearClasses();
@@ -48,10 +45,9 @@ const addElements = (array) => {
   }
 };
 
-const filterRestaurants = async (keyword) => {
-  const restaurantsList = await fetchData(restaurantListUrl);
+const filterRestaurants = (keyword) => {
   clearRestaurantList(table);
-  const restaurantsListFiltered = await restaurantsList.filter(
+  const restaurantsListFiltered = restaurantsCache.filter(
     (restaurant) => restaurant.company.toLowerCase().includes(keyword.toLowerCase())
   );
   addElements(sortList(restaurantsListFiltered));
@@ -67,6 +63,7 @@ const run = async () => {
   try {
     const data = await fetchData(restaurantListUrl);
     const list = Array.isArray(data) ? data : [];
+    restaurantsCache = list;
     addElements(sortList(list));
   } catch (err) {
     console.error(err);

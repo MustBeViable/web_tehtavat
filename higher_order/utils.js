@@ -3,6 +3,10 @@ const fetchData = async (url) => {
     const response = await fetch(url);
     if (response.ok) {
       return response.json();
+    } 
+    else {
+      const message = `HTTP: ${response.status}, ${response.statusText}`;
+      failedToLoad("div", message, "refresh page");
     }
   } catch (e) {
     console.log(e);
@@ -38,6 +42,8 @@ function debounce(fn, delay = 300) {
 const failedToLoad = (element, message, buttonText ) => {
   const errorElement = document.createElement(element);
   const div = document.createElement("div");
+  div.setAttribute("role", "alert");
+  div.setAttribute("aria-live", "polite")
   div.innerHTML += `
     <h1>${message}</h1>
     <button id="close_me">${buttonText}</button>
