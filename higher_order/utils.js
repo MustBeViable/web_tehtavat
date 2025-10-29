@@ -27,4 +27,9 @@ const clearRestaurantList = (element) => {
   element.innerHTML = '';
 }
 
-export { fetchData, sortList, clearClasses, clearRestaurantList };
+function debounce(fn, delay=300){
+  let t; 
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); };
+}
+
+export { fetchData, sortList, clearClasses, clearRestaurantList, debounce };

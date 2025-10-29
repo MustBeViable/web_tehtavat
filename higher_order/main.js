@@ -12,6 +12,7 @@ import {
   sortList,
   clearClasses,
   clearRestaurantList,
+  debounce
 } from "./utils.js";
 
 const failedToLoad = (place) => {
@@ -61,21 +62,22 @@ const addElements = (array) => {
   }
 };
 
-//lisää logiikka missä se hakee osissa, esim substringeillä
 const filterRestaurants = async (keyword) => {
   const restaurantsList = await fetchData(restaurantListUrl);
   clearRestaurantList(table);
   const restaurantsListFiltered = await restaurantsList.filter(
-    (restaurant) => restaurant.company.toLowerCase() === keyword.toLowerCase()
+    (restaurant) => restaurant.company.toLowerCase().includes(keyword.toLowerCase())
   );
-  addElements(restaurantsListFiltered);
+  addElements(sortList(restaurantsListFiltered));
 };
+
 
 const run = async () => {
   filterSubmitButton.addEventListener("click", (evt) => {
     evt.preventDefault();
     filterRestaurants(filterCompany.value);
   });
+  filterCompany.addEventListener('input', debounce((e) => filterRestaurants(filterCompany.value), 300))
   try {
     const data = await fetchData(restaurantListUrl);
     const list = Array.isArray(data) ? data : [];
@@ -84,11 +86,6 @@ const run = async () => {
     console.error(err);
     failedToLoad("restaurant");
   }
-};
-
-const updateRestaurantList = () => {
-  clearRestaurantList(table);
-  addElements();
 };
 
 run();
