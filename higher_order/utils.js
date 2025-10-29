@@ -29,12 +29,11 @@ const clearClasses = () => {
 
 const clearRestaurantList = (element) => {
   element.innerHTML = `
-  <table class="restaurant_list">
     <tr>
       <th>Name</th>
       <th>Company name</th>
     </tr>
-  </table>`;
+    `;
 };
 
 function debounce(fn, delay = 300) {
