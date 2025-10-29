@@ -50,24 +50,31 @@ const restaurantModal = (restaurant, menu) => {
   </table>
   </div>
   `;
-  let menuHTML = '<div class="menu_table"><table>';
-  courses.forEach(({ name: courseName, price, diets }) => {
-    menuHTML += `
-        <tr>
-        <td>${courseName ? courseName : "no name"}</td>
-        <td>${price ?? "no price"}</td>
-            <td class="menu_class" >${
-              Array.isArray(diets)
-                ? diets.join(", ")
-                : typeof diets === "string"
-                ? diets
-                : "-"
-            }</td>
-            </tr>`;
-  });
-  menuHTML += "</table></div>";
+  const rowsHtml = courses
+    .map(
+      ({ name: courseName, price, diets }) => `
+    <tr>
+      <td>${courseName ? courseName : "no name"}</td>
+      <td>${price ?? "no price"}</td>
+      <td class="menu_class">${
+        Array.isArray(diets)
+          ? diets.join(", ")
+          : typeof diets === "string"
+          ? diets
+          : "-"
+      }</td>
+    </tr>
+  `
+    )
+    .join("");
+  const menuHTML = `
+    <div class="menu_table">
+      <table>
+        ${rowsHtml}
+      </table>
+    </div>
+  `;
   return restaurantHTML + menuHTML;
 };
-
 
 export { restaurantRow, restaurantModal };
