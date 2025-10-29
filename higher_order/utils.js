@@ -33,7 +33,8 @@ const clearRestaurantList = (element) => {
     <tr>
       <th>Name</th>
       <th>Company name</th>
-    </tr>`;
+    </tr>
+  </table>`;
 };
 
 function debounce(fn, delay = 300) {
@@ -46,17 +47,18 @@ function debounce(fn, delay = 300) {
 
 const failedToLoad = (element, message, buttonText ) => {
   const errorElement = document.createElement(element);
-  const div = document.createElement("div");
+  const div = document.getElementById('error');
+  div.innerHTML = "";
   div.setAttribute("role", "alert");
   div.setAttribute("aria-live", "polite")
-  div.innerHTML += `
-    <h1>${message}</h1>
-    `;
-  errorElement.appendChild(div);
-  document.querySelector("body").appendChild(errorElement);
+  div.appendChild(errorElement);
+  document.querySelector("body").appendChild(div);
   switch (element) {
     case "dialog": {
-      div.innerHTML += `<button id="close_me">${buttonText}</button>`;
+      errorElement.innerHTML = `
+      <p><b>${message}</p></b>
+      <button id="close_me">${buttonText}</button>
+      `;
       document.getElementById("close_me")?.addEventListener("click", (e) => {
         e.preventDefault();
         errorElement.close();
@@ -66,11 +68,19 @@ const failedToLoad = (element, message, buttonText ) => {
       break;
     }
     case "div": {
-      div.innerHTML += `<button id="close_me">${buttonText}</button>`;
+      errorElement.innerHTML = `
+      <p><b>${message}</p></b>
+      <button id="close_me">${buttonText}</button>
+      `;
       document.getElementById("close_me")?.addEventListener("click", (e) => {
         errorElement.innerHTML = "";
         location.reload();
       });
+    }
+    case "p": {
+      errorElement.innerHTML = `
+      <p><b>${message}</p></b>
+      `
     }
   }
 };

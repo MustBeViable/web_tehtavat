@@ -13,11 +13,12 @@ import {
   clearClasses,
   clearRestaurantList,
   debounce,
-  failedToLoad
+  failedToLoad,
 } from "./utils.js";
 
 //caches restauranlist to only one API call per reload.
 let restaurantsCache = [];
+
 
 const addElements = (array) => {
   if (array?.length >= 1) {
@@ -38,7 +39,11 @@ const addElements = (array) => {
               document.querySelector("dialog").close()
             );
         } else {
-          failedToLoad("dialog", "No menu found, check your connection and try again.", "close");
+          failedToLoad(
+            "dialog",
+            "No menu found, check your connection and try again.",
+            "close"
+          );
         }
       });
     });
@@ -47,21 +52,25 @@ const addElements = (array) => {
 
 const filterRestaurants = (keyword) => {
   clearRestaurantList(table);
-  const restaurantsListFiltered = restaurantsCache.filter(
-    (restaurant) => (restaurant.company||"").toLowerCase().includes(keyword.toLowerCase())
+  const restaurantsListFiltered = restaurantsCache.filter((restaurant) =>
+    (restaurant.company || "").toLowerCase().includes(keyword.toLowerCase())
   );
-  if (restaurantsListFiltered.length <= 0) failedToLoad("h3", "No restaurants", "close");
-  else addElements(sortList(restaurantsListFiltered));
-  table.innerHTML += `</table>`
+  if (restaurantsListFiltered.length <= 0) {
+      failedToLoad("p", "<b>No restaurants</b>", "close");
+    } else {
+    addElements(sortList(restaurantsListFiltered));
+  }
 };
-
 
 const run = async () => {
   filterSubmitButton.addEventListener("click", (evt) => {
     evt.preventDefault();
     filterRestaurants(filterCompany.value);
   });
-  filterCompany.addEventListener('input', debounce((e) => filterRestaurants(filterCompany.value), 300))
+  filterCompany.addEventListener(
+    "input",
+    debounce((e) => filterRestaurants(filterCompany.value), 300)
+  );
   try {
     const data = await fetchData(restaurantListUrl);
     const list = Array.isArray(data) ? data : [];
@@ -69,7 +78,11 @@ const run = async () => {
     addElements(sortList(list));
   } catch (err) {
     console.error(err);
-    failedToLoad("div", "No connection. Check your connection and try again.", "refresh page");
+    failedToLoad(
+      "div",
+      "No connection. Check your connection and try again.",
+      "refresh page"
+    );
   }
 };
 
