@@ -48,7 +48,7 @@ const addElements = (array) => {
 const filterRestaurants = (keyword) => {
   clearRestaurantList(table);
   const restaurantsListFiltered = restaurantsCache.filter(
-    (restaurant) => restaurant.company.toLowerCase().includes(keyword.toLowerCase())
+    (restaurant) => (restaurant.company||"").toLowerCase().includes(keyword.toLowerCase())
   );
   if (restaurantsListFiltered.length <= 0) failedToLoad("h3", "No restaurants", "close");
   else addElements(sortList(restaurantsListFiltered));
