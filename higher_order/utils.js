@@ -6,7 +6,7 @@ const fetchData = async (url) => {
     }
   } catch (e) {
     console.log(e);
-    failedToLoad("anything");
+    failedToLoad("div", "No connection. Check your connection and try again.", "refresh page");
   }
 };
 
@@ -24,12 +24,50 @@ const clearClasses = () => {
 };
 
 const clearRestaurantList = (element) => {
-  element.innerHTML = '';
+  element.innerHTML = "";
+};
+
+function debounce(fn, delay = 300) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), delay);
+  };
 }
 
-function debounce(fn, delay=300){
-  let t; 
-  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); };
-}
+const failedToLoad = (element, message, buttonText ) => {
+  const errorElement = document.createElement(element);
+  const div = document.createElement("div");
+  div.innerHTML += `
+    <h1>${message}</h1>
+    <button id="close_me">${buttonText}</button>
+    `;
+  errorElement.appendChild(div);
+  document.querySelector("body").appendChild(errorElement);
+  switch (element) {
+    case "dialog": {
+      document.getElementById("close_me")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        errorElement.close();
+        div.innerHTML = "";
+      });
+      errorElement.showModal();
+      break;
+    }
+    case "div": {
+      document.getElementById("close_me")?.addEventListener("click", (e) => {
+        errorElement.innerHTML = "";
+        location.reload();
+      });
+    }
+  }
+};
 
-export { fetchData, sortList, clearClasses, clearRestaurantList, debounce };
+export {
+  fetchData,
+  sortList,
+  clearClasses,
+  clearRestaurantList,
+  debounce,
+  failedToLoad,
+};

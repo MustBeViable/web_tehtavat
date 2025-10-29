@@ -12,24 +12,10 @@ import {
   sortList,
   clearClasses,
   clearRestaurantList,
-  debounce
+  debounce,
+  failedToLoad
 } from "./utils.js";
 
-const failedToLoad = (place) => {
-  const div = document.createElement("div");
-  div.innerHTML += `
-    <h1>Failed to load ${place}. Check your connection!</h1>
-    <button id="close_me">Close</button>
-    `;
-  document.querySelector("dialog").appendChild(div);
-  document.getElementById("close_me")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.querySelector("dialog").close();
-    div.innerHTML = "";
-  });
-
-  dialog.showModal();
-};
 
 const addElements = (array) => {
   if (array?.length >= 1) {
@@ -55,7 +41,7 @@ const addElements = (array) => {
               document.querySelector("dialog").close()
             );
         } else {
-          failedToLoad("menu");
+          failedToLoad("dialog", "No menu found, check your connection and try again.", "close");
         }
       });
     });
@@ -84,7 +70,7 @@ const run = async () => {
     addElements(sortList(list));
   } catch (err) {
     console.error(err);
-    failedToLoad("restaurant");
+    failedToLoad("div", "No connection. Check your connection and try again.", "refresh page");
   }
 };
 
