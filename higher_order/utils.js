@@ -69,12 +69,7 @@ const failedToLoad = (element, message, buttonText ) => {
     case "div": {
       errorElement.innerHTML = `
       <p><b>${message}</p></b>
-      <button id="close_me">${buttonText}</button>
       `;
-      document.getElementById("close_me")?.addEventListener("click", (e) => {
-        errorElement.innerHTML = "";
-        location.reload();
-      });
     }
     case "p": {
       errorElement.innerHTML = `
